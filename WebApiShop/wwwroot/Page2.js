@@ -10,19 +10,26 @@ async function updateUser() {
         const LastName = document.querySelector("#LastName").value;
         const password = document.querySelector("#password").value;
 
+        console.log("Email:", Email);
+        console.log("FirstName:", FirstName);
+        console.log("LastName:", LastName);
+        console.log("Password:", password);
+
         let currentUser = JSON.parse(sessionStorage.getItem('user'));
         if (!currentUser) {
             alert("No current user in sessionStorage");
             return;
         }
-        
-        const Id = currentUser.id;
-        const data = {Id,
-            ...(Email && { Email }),
-            ...(FirstName && { FirstName }),
-            ...(LastName && { LastName }),
-            ...(password && { Password: password })
 
+        const Id = currentUser.id;
+
+        const data = {
+            Id,
+         
+            Email: Email || currentUser.Email,
+            FirstName: FirstName || currentUser.FirstName,
+            LastName: LastName || currentUser.LastName,
+            Password: password || currentUser.Password
         };
 
         console.log("PUT body:", JSON.stringify(data));
@@ -36,10 +43,12 @@ async function updateUser() {
         });
 
         if (response.ok) {
-            if (Email) currentUser.Email = Email;
-            if (FirstName) currentUser.FirstName = FirstName;
-            if (LastName) currentUser.LastName = LastName;
-            if (password) currentUser.Password = password;
+            
+            currentUser.Email = data.Email;
+            currentUser.FirstName = data.FirstName;
+            currentUser.LastName = data.LastName;
+            currentUser.Password = data.Password;
+
             sessionStorage.setItem('user', JSON.stringify(currentUser));
             alert("success");
         } else {
