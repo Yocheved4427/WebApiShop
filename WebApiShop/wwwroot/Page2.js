@@ -35,10 +35,10 @@ async function updateUser() {
         });
 
         if (response.ok) {
-            currentUser.Email = Email;
-            currentUser.FirstName = FirstName;
-            currentUser.LastName = LastName;
-            currentUser.Password = password;
+            if (Email) currentUser.Email = Email;
+            if (FirstName) currentUser.FirstName = FirstName;
+            if (LastName) currentUser.LastName = LastName;
+            if (password) currentUser.Password = password;
             sessionStorage.setItem('user', JSON.stringify(currentUser));
             alert("success");
         } else {
