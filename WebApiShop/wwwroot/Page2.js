@@ -15,13 +15,14 @@ async function updateUser() {
             alert("No current user in sessionStorage");
             return;
         }
-
+        
         const Id = currentUser.id;
         const data = {Id,
-            Email,
-            FirstName,
-            LastName,
-            Password: password
+            ...(Email && { Email }),
+            ...(FirstName && { FirstName }),
+            ...(LastName && { LastName }),
+            ...(password && { Password: password })
+
         };
 
         console.log("PUT body:", JSON.stringify(data));
