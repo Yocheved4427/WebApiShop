@@ -23,38 +23,47 @@
             width: 20vw;
             margin: 2vw;
         }
+
         button {
             margin-top: 1vh;
+        }
+
+        progress::-moz-progress-bar {
+            background-color: green;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    
-    
-    
-        <div class="cont">
-            <div class="existUser">
-                <h3>משתמש רשום</h3>
-                <lable for="userName">שם משתמש</lable>
-                <input type="email" id="userName" required />
-                <lable for="password">סיסמא</lable>
-                <input type="password" id="password" required />
-                <button onclick="Login()">Log in</button>
-            </div>
 
-            <div class="newUser">
-                <h3>משתמש חדש</h3>
-                <lable for="userName2">שם משתמש</lable>
-                <input type="email" id="userName2" name="userName" required />
-                <lable for="userName">שם פרטי</lable>
-                <input type="text" id="firstName" name="firstName" required />
-                <lable for="userName">שם משפחה</lable>
-                <input type="text" id="lastName" name="lastName" required />
-                <lable for="password2">סיסמא</lable>
-                <input type="password" id="password2" name="password" required />
-                <button onclick="Register()"> Register</button>
-            </div>
 
+
+    <div class="cont">
+        <div class="existUser">
+            <h3>משתמש רשום</h3>
+            <lable for="userName">שם משתמש</lable>
+            <input type="email" id="userName" required />
+            <lable for="password">סיסמא</lable>
+            <input type="password" id="password" required />
+            <button onclick="Login()">Log in</button>
         </div>
-    </body>
+
+        <div class="newUser">
+            <h3>משתמש חדש</h3>
+            <lable for="userName2">שם משתמש</lable>
+            <input type="email" id="userName2" name="userName" required />
+            <lable for="userName">שם פרטי</lable>
+            <input type="text" id="firstName" name="firstName" required />
+            <lable for="userName">שם משפחה</lable>
+            <input type="text" id="lastName" name="lastName" required />
+            <lable for="password2">סיסמא</lable>
+            <input type="password" id="password2" name="password" required />
+            <button onclick="Register()"> Register</button>
+            <button onclick="checkPasswordScore()">Check Password</button>
+            <label for="passwordStrength">password score:</label>
+            <progress id="passwordScore" value="0" max="100"> 32% </progress>
+        </div>
+
+    </div>
+</body>
 </html>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using System.ComponentModel.DataAnnotations;
+using Services;
+using Entities;
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApiShop.Controllers
@@ -9,95 +10,66 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private static  List<User> users = new List<User>();
+        UserServices services = new UserServices();
+        //private static  List<User> users = new List<User>();
 
 
-        // GET: api/<Users>
         [HttpGet]
-        public IEnumerable <User> Get()
-        {
-            return users;
-        }
+        //public IEnumerable <User> Get()
+        //{
+        //    return users;
+        //}
 
-        // GET api/<Users>/5
+
         [HttpGet("{id}")]
-        public ActionResult<User> Get(int id)
+        public ActionResult<User> GetUserById(int id)
         {
-            using (StreamReader reader = System.IO.File.OpenText("text.txt"))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-                    User? user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user?.id == id)
-                        return Ok(user);
-                }
-            }
+            User? user=services.GetUserById(id);
+            if (user != null)
+                return Ok(user);
             return NotFound();
-
-
-            
         }
         [HttpPost("Login")]
         public ActionResult<User> Login([FromBody] ExistingUser existingUser)
         {
-            using (StreamReader reader = System.IO.File.OpenText("text.txt"))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-                    User? user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user?.Email == existingUser.Email && user?.Password == existingUser.Password)
-                    return Ok(user);
-                   }
-            }
-            return NotFound();
 
+            User? user=services.Login(existingUser);
+            if (user != null)
+                return Ok(user);
+            return NotFound();
         }
-        // POST api/<Users>
+
         [HttpPost]
-        public ActionResult<User> Post([FromBody] User user)
+        public ActionResult<User> Register([FromBody] User user)
         {
-            
-            int numberOfUsers = System.IO.File.ReadLines("text.txt").Count();
-            user.id = numberOfUsers + 1;
-            string userJson = JsonSerializer.Serialize(user);
-            System.IO.File.AppendAllText("text.txt", userJson + Environment.NewLine);
-            return CreatedAtAction(nameof(Get), new {id= user.id}, user);
+            User? user1=services.Register(user);
+            if (user1 == null)
+                return BadRequest("Password");
+           
+            return CreatedAtAction(nameof(GetUserById), new { user.id }, user);
+
+
         }
 
         // PUT api/<Users>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] User updateUser)
+        public IActionResult Update(int id, [FromBody] User updateUser)
         {
-            string textToReplace = string.Empty;
-            using (StreamReader reader = System.IO.File.OpenText("text.txt"))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-
-                    User? user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user?.id == id)
-                        textToReplace = currentUserInFile;
-                }
-            }
-
-            if (textToReplace != string.Empty)
-            {
-                string text = System.IO.File.ReadAllText("text.txt");
-                text = text.Replace(textToReplace, JsonSerializer.Serialize(updateUser));
-                System.IO.File.WriteAllText("text.txt", text);
-            }
-
-
+            
+            bool success=services.Upadate(id,updateUser);
+            if (!success)
+                return BadRequest();
+            return Ok();
         }
 
         // DELETE api/<Users>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            services.Delete(id);
         }
+        
+
     }
 }
 
