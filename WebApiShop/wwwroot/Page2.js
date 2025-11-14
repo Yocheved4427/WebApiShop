@@ -41,7 +41,12 @@ async function updateUser() {
             },
             body: JSON.stringify(data)
         });
-
+        if (response.status == 400) {
+            throw Error("Your password is too weak.")
+        }
+        if (!response.ok) {
+            throw Error("Update failed: " + response.status);
+        }
         if (response.ok) {
             
             currentUser.Email = data.Email;
@@ -51,10 +56,7 @@ async function updateUser() {
 
             sessionStorage.setItem('user', JSON.stringify(currentUser));
             alert("success");
-        } else {
-            const update = await response.text();
-            console.error("API error:", response.status, update);
-            alert("Update failed: " + response.status);
+        
         }
     }
     catch (e) {

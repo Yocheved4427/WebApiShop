@@ -1,4 +1,28 @@
 ﻿
+async function checkPasswordScore() {
+    try {
+        const password = document.querySelector("#password2").value
+        const progress = document.querySelector("#passwordScore")
+        const response = await fetch("https://localhost:44386/api/Password/PasswordScore", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(password)
+        });
+
+        if (!response.ok) {
+            throw Error("error")
+        }
+        const data = await response.json();
+        console.log(data)
+        progress.value = data * 25
+    }
+    catch (error) {
+        alert(error)
+    }
+}
+
 
 async function getUserData() {
     try {
@@ -15,36 +39,38 @@ async function getUserData() {
         alert(e)
     }
 }
+   
 async function Login() {
     try {
-        const email = document.querySelector("#userName").value;
-        const password = document.querySelector("#password").value;
+        const email = document.querySelector("#userName").value
+        const password = document.querySelector("#password").value
         if (email == "" || password == "")
             throw Error("Please enter userName and password")
-        const data = { email, password };
-        const response = await fetch("https://localhost:44386/api/User/Login", {
+        const LoginUser = { email, password }
+        const response = await fetch('api/User/Login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(LoginUser)
         });
-        
         if (!response.ok) {
-            throw Error("New user, please register ")
+            throw Error("error")
         }
-        
-        else {
-            const dataLogin = await response.json();
-            sessionStorage.setItem('user', JSON.stringify(dataLogin))
-            window.location.href = "Page2.html"
-
+        if (response.status == 404) {
+            alert("Email or password incorrect! please try again ")
+            return
         }
+        const dataLogin = await response.json();
+        console.log(dataLogin)
+        sessionStorage.setItem('user', JSON.stringify(dataLogin))
+        window.location.href = "Page2.html"
     }
-    catch (e) {
-        alert(e)
+    catch (error) {
+        alert(error)
     }
 }
+
 async function Register() { 
     try {
         const Email = document.querySelector("#userName2").value;
@@ -61,7 +87,12 @@ async function Register() {
             },
             body: JSON.stringify(data)
         });
-        
+        if (response.status == 400) {
+            const responseText = await response.text()
+            if (responseText == "Password")
+                throw Error("Your password is too weak.")
+            throw Error("Please try again")
+        }
         if (!response.ok)
             throw Error("error")
         const dataRegister = await response.json();
