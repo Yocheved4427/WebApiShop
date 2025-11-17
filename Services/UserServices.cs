@@ -2,37 +2,56 @@
 using Repository;
 namespace Services
 {
-    public class UserServices
+    public class UserServices : IUserRepository,IPasswordServices, IUserServices
     {
-        UserRepository userRepository = new UserRepository();
-        private PasswordServices passwordService = new PasswordServices();
+        private readonly IUserRepository _repository;
+        private readonly IPasswordServices _passwordServices;
+        
+        public UserServices(IUserRepository repository, IPasswordServices passwordServices)
+        {
+            _repository = repository;
+            _passwordServices = passwordServices;
+        }
+      
+
+       
         public User? GetUserById(int id)
         {
-            return userRepository.GetUserById(id);
+            return _repository.GetUserById(id);
         }
         public User? Login(ExistingUser existingUser)
         {
-            return userRepository.Login(existingUser);
+            return _repository.Login(existingUser);
         }
-        public User? Register(User user)
+        public User Register(User user)
         {
-            int passScore = passwordService.PasswordScore(user.Password);
-                if (passScore < 2)
+            int passScore = _passwordServices.PasswordScore(user.Password);
+            if (passScore < 2)
                 return null;
-            return userRepository.Register(user);
+            return _repository.Register(user);
         }
         public bool Upadate(int id, User updateUser)
         {
-            int passScore = passwordService.PasswordScore(updateUser.Password);
+            int passScore = _passwordServices.PasswordScore(updateUser.Password);
             if (passScore < 2)
                 return false;
-            userRepository.Upadate(id, updateUser);
+            _repository.Upadate(id, updateUser);
             return true;
 
         }
         public void Delete(int id)
         {
-            userRepository.Delete(id);
+            _repository.Delete(id);
+        }
+
+        void IUserRepository.Upadate(int id, User updateUser)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int PasswordScore(string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }
