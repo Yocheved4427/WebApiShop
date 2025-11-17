@@ -8,9 +8,13 @@ namespace WebApiShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : ControllerBase,IUserServices
     {
-        UserServices services = new UserServices();
+        private readonly IUserServices _IuserServices;
+        public UserController(IUserServices userServices)
+        {
+            _IuserServices = userServices;
+        }
         //private static  List<User> users = new List<User>();
 
 
@@ -24,7 +28,7 @@ namespace WebApiShop.Controllers
         [HttpGet("{id}")]
         public ActionResult<User> GetUserById(int id)
         {
-            User? user=services.GetUserById(id);
+            User? user= _IuserServices.GetUserById(id);
             if (user != null)
                 return Ok(user);
             return NotFound();
@@ -33,7 +37,7 @@ namespace WebApiShop.Controllers
         public ActionResult<User> Login([FromBody] ExistingUser existingUser)
         {
 
-            User? user=services.Login(existingUser);
+            User? user= _IuserServices.Login(existingUser);
             if (user != null)
                 return Ok(user);
             return NotFound();
@@ -42,7 +46,7 @@ namespace WebApiShop.Controllers
         [HttpPost]
         public ActionResult<User> Register([FromBody] User user)
         {
-            User? user1=services.Register(user);
+            User? user1=_IuserServices.Register(user);
             if (user1 == null)
                 return BadRequest("Password");
            
@@ -56,7 +60,7 @@ namespace WebApiShop.Controllers
         public IActionResult Update(int id, [FromBody] User updateUser)
         {
             
-            bool success=services.Upadate(id,updateUser);
+            bool success=_IuserServices.Upadate(id,updateUser);
             if (!success)
                 return BadRequest();
             return Ok();
@@ -66,10 +70,28 @@ namespace WebApiShop.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            services.Delete(id);
+            _IuserServices.Delete(id);
         }
-        
 
+        User? IUserServices.GetUserById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        User? IUserServices.Login(ExistingUser existingUser)
+        {
+            throw new NotImplementedException();
+        }
+
+        User IUserServices.Register(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Upadate(int id, User updateUser)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

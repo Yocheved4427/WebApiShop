@@ -1,5 +1,13 @@
+using Repository;
+using Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IUserServices, UserServices>();  
+
+builder.Services.AddScoped<IPasswordServices, PasswordServices>();
 // Add services to the container.
 
 builder.Services.AddControllers();

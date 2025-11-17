@@ -5,16 +5,15 @@ namespace WebApiShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PasswordController : ControllerBase
+    public class PasswordController : ControllerBase,IPasswordServices
     {
-        private PasswordServices passwordService = new PasswordServices();
-        // GET: api/<PasswordsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IPasswordServices _passwordServices;
+        public PasswordController(IPasswordServices passwordServices)
         {
-            return new string[] { "value1", "value2" };
+            _passwordServices = passwordServices;
         }
-
+        // GET: api/<PasswordsController>
+        
         // GET api/<PasswordsController>/5
         [HttpGet("{id}")]
         public string Get(int id)
@@ -42,8 +41,13 @@ namespace WebApiShop.Controllers
         [HttpPost("PasswordScore")]
         public ActionResult<int> PasswordScore([FromBody] string password)
         {
-            int strength = passwordService.PasswordScore(password);
+            int strength = _passwordServices.PasswordScore(password);
             return Ok(strength);
+        }
+
+        int IPasswordServices.PasswordScore(string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

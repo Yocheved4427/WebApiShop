@@ -5,7 +5,7 @@ namespace Repository
 
 {
 
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         public User? GetUserById(int id)
         {
