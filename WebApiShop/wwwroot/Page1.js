@@ -54,13 +54,15 @@ async function Login() {
             },
             body: JSON.stringify(LoginUser)
         });
+        if (response.status === 401) {
+            alert("Email or password incorrect! Please try again.");
+            return;
+        }
+
         if (!response.ok) {
-            throw Error("error")
+            throw new Error("An unexpected error occurred.");
         }
-        if (response.status == 404) {
-            alert("Email or password incorrect! please try again ")
-            return
-        }
+
         const dataLogin = await response.json();
         console.log(dataLogin)
         sessionStorage.setItem('user', JSON.stringify(dataLogin))
@@ -104,6 +106,9 @@ async function Register() {
     }
     
 }
-
+function toggleNewUserForm() {
+    document.querySelector('.newUser').classList.toggle('showNewUser');
+    document.querySelector('.existUser').classList.toggle('showNewUser');
+}
 
     
