@@ -40,7 +40,7 @@ namespace WebApiShop.Controllers
             User? user= _IuserServices.Login(existingUser);
             if (user != null)
                 return Ok(user);
-            return NotFound();
+            return Unauthorized("Invalid email or password");
         }
 
         [HttpPost]
