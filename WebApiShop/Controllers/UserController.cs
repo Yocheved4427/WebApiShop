@@ -8,7 +8,7 @@ namespace WebApiShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase,IUserServices
+    public class UserController : ControllerBase
     {
         private readonly IUserServices _IuserServices;
         public UserController(IUserServices userServices)
@@ -19,79 +19,61 @@ namespace WebApiShop.Controllers
 
 
         [HttpGet]
-        //public IEnumerable <User> Get()
-        //{
-        //    return users;
-        //}
+        public async Task<ActionResult<IEnumerable<User>>> Get()
+        {
+            IEnumerable<User> users = await _IuserServices.GetUsers();
+            if (users != null && users.Any())
+                return Ok(users);
+            return NoContent();
+        }
 
 
         [HttpGet("{id}")]
-        public ActionResult<User> GetUserById(int id)
+        public async Task<ActionResult<User>> GetUserById(int id)
         {
-            User? user= _IuserServices.GetUserById(id);
-            if (user != null)
-                return Ok(user);
-            return NotFound();
+            User user = await _IuserServices.GetUserById(id);
+            if (user == null)
+                return NotFound();
+            return Ok(user);
         }
         [HttpPost("Login")]
-        public ActionResult<User> Login([FromBody] ExistingUser existingUser)
+        public async Task<ActionResult<User>> Login([FromBody] ExistingUser existingUser)
         {
 
-            User? user= _IuserServices.Login(existingUser);
+            User user = await _IuserServices.Login(existingUser);
             if (user != null)
                 return Ok(user);
             return Unauthorized("Invalid email or password");
         }
 
         [HttpPost]
-        public ActionResult<User> Register([FromBody] User user)
+        public async Task<ActionResult<User>> Register([FromBody] User user)
         {
-            User? user1=_IuserServices.Register(user);
+            User user1 = await _IuserServices.Register(user);
             if (user1 == null)
                 return BadRequest("Password");
-           
-            return CreatedAtAction(nameof(GetUserById), new { user.id }, user);
+
+            return CreatedAtAction(nameof(GetUserById), new { user.Id }, user);
 
 
         }
 
         // PUT api/<Users>/5
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] User updateUser)
+        public async Task<IActionResult> Update(int id, [FromBody] User updateUser)
         {
-            
-            bool success=_IuserServices.Upadate(id,updateUser);
+
+            bool success = await _IuserServices.Upadate(id, updateUser);
             if (!success)
                 return BadRequest();
             return Ok();
         }
 
-        // DELETE api/<Users>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            _IuserServices.Delete(id);
-        }
 
-        User? IUserServices.GetUserById(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        User? IUserServices.Login(ExistingUser existingUser)
-        {
-            throw new NotImplementedException();
-        }
 
-        User IUserServices.Register(User user)
-        {
-            throw new NotImplementedException();
-        }
 
-        public bool Upadate(int id, User updateUser)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
 

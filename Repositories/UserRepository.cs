@@ -1,77 +1,46 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
+using Repositories;
 using System.Text.Json;
-namespace Repository
+namespace Repositories
 
 
 {
 
     public class UserRepository : IUserRepository
     {
-        public User? GetUserById(int id)
+        public readonly UsersContext _context;
+        public UserRepository(UsersContext context)
         {
-            using (StreamReader reader = System.IO.File.OpenText("text.txt"))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-                    User? user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user?.id == id)
-                        return user;
-                }
-            }
-
-            return null;
+            _context = context;
         }
-        public User? Login(ExistingUser existingUser)
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            using (StreamReader reader = System.IO.File.OpenText("text.txt"))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-                    User? user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user?.Email == existingUser.Email && user?.Password == existingUser.Password)
-                        return user;
-                }
-            }
-            return null;
+            return await _context.Users.ToListAsync();
+        }
+
+        public async Task<User> GetUserById(int id)
+        {
+            return await _context.Users.FindAsync(id);
+        }
+        public async Task<User> Login(ExistingUser existingUser)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == existingUser.Email && u.Password == existingUser.Password);
 
         }
-        public User Register(User user)
+        public async Task<User> Register(User user)
         {
-
-            int numberOfUsers = System.IO.File.ReadLines("text.txt").Count();
-            user.id = numberOfUsers + 1;
-            string userJson = JsonSerializer.Serialize(user);
-            System.IO.File.AppendAllText("text.txt", userJson + Environment.NewLine);
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
             return user;
+
         }
-        public void Upadate(int id, User updateUser)
+        public async Task Upadate(int id, User updateUser)
         {
-            string textToReplace = string.Empty;
-            using (StreamReader reader = System.IO.File.OpenText("text.txt"))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-
-                    User? user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user?.id == id)
-                        textToReplace = currentUserInFile;
-                }
-            }
-
-            if (textToReplace != string.Empty)
-            {
-                string text = System.IO.File.ReadAllText("text.txt");
-                text = text.Replace(textToReplace, JsonSerializer.Serialize(updateUser));
-                System.IO.File.WriteAllText("text.txt", text);
-            }
-
+            _context.Users.Update(updateUser);
+            await _context.SaveChangesAsync();
 
         }
-        public void Delete(int id)
-        {
-        }
+       
     }
 }
