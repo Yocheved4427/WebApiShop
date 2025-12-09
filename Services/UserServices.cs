@@ -16,15 +16,15 @@ namespace Services
       
 
        
-        public async Task<User> GetUserById(int id)
+        public async Task<User?> GetUserById(int id)
         {
             return await _repository.GetUserById(id);
         }
-        public async Task<User> Login(ExistingUser existingUser)
+        public async Task<User?> Login(ExistingUser existingUser)
         {
             return await _repository.Login(existingUser);
         }
-        public async Task< User> Register(User user)
+        public async Task<User?> Register(User user)
         {
             int passScore = _passwordServices.PasswordScore(user.Password);
             if (passScore < 2)

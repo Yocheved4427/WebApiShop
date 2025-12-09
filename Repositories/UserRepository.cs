@@ -9,8 +9,8 @@ namespace Repositories
 
     public class UserRepository : IUserRepository
     {
-        public readonly UsersContext _context;
-        public UserRepository(UsersContext context)
+        public readonly ApiShopContext _context;
+        public UserRepository(ApiShopContext context)
         {
             _context = context;
         }
@@ -19,11 +19,11 @@ namespace Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User> GetUserById(int id)
+        public async Task<User?> GetUserById(int id)
         {
             return await _context.Users.FindAsync(id);
         }
-        public async Task<User> Login(ExistingUser existingUser)
+        public async Task<User?> Login(ExistingUser existingUser)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == existingUser.Email && u.Password == existingUser.Password);
 
