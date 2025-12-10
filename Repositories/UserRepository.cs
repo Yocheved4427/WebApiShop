@@ -1,7 +1,5 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
-using Repositories;
-using System.Text.Json;
 namespace Repositories
 
 
@@ -9,7 +7,7 @@ namespace Repositories
 
     public class UserRepository : IUserRepository
     {
-        public readonly ApiShopContext _context;
+        private readonly ApiShopContext _context;
         public UserRepository(ApiShopContext context)
         {
             _context = context;
@@ -28,18 +26,17 @@ namespace Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == existingUser.Email && u.Password == existingUser.Password);
 
         }
-        public async Task<User> Register(User user)
+        public async Task<User?> Register(User user)
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return user;
 
         }
-        public async Task Upadate(int id, User updateUser)
+        public async Task Update(int id, User updateUser)
         {
             _context.Users.Update(updateUser);
             await _context.SaveChangesAsync();
-
         }
        
     }

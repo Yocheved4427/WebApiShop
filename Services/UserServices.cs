@@ -31,27 +31,16 @@ namespace Services
                 return null;
             return await _repository.Register(user);
         }
-        public async Task<bool> Upadate(int id, User updateUser)
+        public async Task<bool> Update(int id, User updateUser)
         {
             int passScore = _passwordServices.PasswordScore(updateUser.Password);
             if (passScore < 2)
                 return false;
-            await _repository.Upadate(id, updateUser);
+            await _repository.Update(id, updateUser);
             return true;
 
         }
-        
-
-       
-
-        public int PasswordScore(string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        
-
-        public async Task<IEnumerable<User>> GetUsers()
+   public async Task<IEnumerable<User>> GetUsers()
         {
             return await _repository.GetUsers();
         }
