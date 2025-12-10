@@ -9,7 +9,7 @@ namespace Repositories
 
     public class UserRepository : IUserRepository
     {
-        public readonly ApiShopContext _context;
+        private readonly ApiShopContext _context;
         public UserRepository(ApiShopContext context)
         {
             _context = context;
@@ -35,11 +35,10 @@ namespace Repositories
             return user;
 
         }
-        public async Task Upadate(int id, User updateUser)
+        public async Task Update(int id, User updateUser)
         {
             _context.Users.Update(updateUser);
             await _context.SaveChangesAsync();
-
         }
        
     }
