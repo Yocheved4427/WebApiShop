@@ -10,10 +10,10 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserServices _IuserServices;
+        private readonly IUserServices _userServices;
         public UserController(IUserServices userServices)
         {
-            _IuserServices = userServices;
+            _userServices = userServices;
         }
         //private static  List<User> users = new List<User>();
 
@@ -21,7 +21,7 @@ namespace WebApiShop.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> Get()
         {
-            IEnumerable<User> users = await _IuserServices.GetUsers();
+            IEnumerable<User> users = await _userServices.GetUsers();
             if (users != null && users.Any())
                 return Ok(users);
             return NoContent();
@@ -31,7 +31,7 @@ namespace WebApiShop.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-            User user = await _IuserServices.GetUserById(id);
+            User user = await _userServices.GetUserById(id);
             if (user == null)
                 return NotFound();
             return Ok(user);
@@ -40,7 +40,7 @@ namespace WebApiShop.Controllers
         public async Task<ActionResult<User>> Login([FromBody] ExistingUser existingUser)
         {
 
-            User user = await _IuserServices.Login(existingUser);
+            User user = await _userServices.Login(existingUser);
             if (user != null)
                 return Ok(user);
             return Unauthorized("Invalid email or password");
@@ -49,7 +49,7 @@ namespace WebApiShop.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> Register([FromBody] User user)
         {
-            User user1 = await _IuserServices.Register(user);
+            User user1 = await _userServices.Register(user);
             if (user1 == null)
                 return BadRequest("Password");
 
@@ -63,10 +63,10 @@ namespace WebApiShop.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] User updateUser)
         {
 
-            bool success = await _IuserServices.Upadate(id, updateUser);
+            bool success = await _userServices.Update(id, updateUser);
             if (!success)
                 return BadRequest();
-            return Ok();
+            return NoContent();
         }
 
 
