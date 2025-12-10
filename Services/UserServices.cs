@@ -38,9 +38,10 @@ namespace Services
                 return false;
             await _repository.Update(id, updateUser);
             return true;
-
         }
-   public async Task<IEnumerable<User>> GetUsers()
+        
+
+        public async Task<IEnumerable<User>> GetUsers()
         {
             return await _repository.GetUsers();
         }
