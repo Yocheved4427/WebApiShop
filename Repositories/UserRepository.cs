@@ -21,9 +21,9 @@ namespace Repositories
         {
             return await _context.Users.FindAsync(id);
         }
-        public async Task<User?> Login(ExistingUser existingUser)
+        public async Task<User?> Login(string email, string password)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == existingUser.Email && u.Password == existingUser.Password);
+            return await _context.Users.Include(user=>user.Orders).FirstOrDefaultAsync(user => user.Email == email && user.Password == password);
 
         }
         public async Task<User?> Register(User user)

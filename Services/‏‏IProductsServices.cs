@@ -1,9 +1,9 @@
 ﻿using Entities;
-
+using DTOs;
 namespace Services
 {
     public interface IProductsServices
     {
-        Task<IEnumerable<Product>> GetProducts();
+        Task<IEnumerable<ProductDTO>> GetProducts();
     }
 }

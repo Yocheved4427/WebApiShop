@@ -6,7 +6,7 @@ namespace Repositories
     {
         
         Task<User?> GetUserById(int id);
-        Task<User?> Login(ExistingUser existingUser);
+        Task<User?> Login(string email,string password);
         Task<User?> Register(User user);
         Task Update(int id, User updateUser);
         Task<IEnumerable<User>> GetUsers();

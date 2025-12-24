@@ -14,7 +14,10 @@ namespace Repositories
         {
             _context = context;
         }
-        
-       
+       public async Task<IEnumerable<Category>> GetCategories()
+        {
+            return await _context.Categories.ToListAsync();
+        }
+
     }
 }

@@ -1,22 +1,34 @@
-﻿using Repositories;
+﻿using DTOs;
+using AutoMapper;
+using Repositories;
 using Entities;
 namespace Services
 {
     public class OrdersServices : IOrdersServices
     {
-        public readonly IOrdersRepository _orders;
-        public OrdersServices(IOrdersRepository orders)
+        private readonly IOrdersRepository _orders;
+        private readonly IMapper _mapper;
+        public OrdersServices(IOrdersRepository orders,IMapper mapper)
         {
             _orders = orders;
+            _mapper = mapper;
+
+        }
+        public async Task<OrderDTO?> GetOrderById(int id)
+        {
+            var order = await _orders.GetOrderById(id);
+            if(order == null)
+            {
+                return null;
+            }
+            return _mapper.Map<Order, OrderDTO>(order);
         }
 
-        public async Task<Order?> GetOrderById(int id)
+        public async Task<OrderDTO> AddOrder(OrderDTO order)
         {
-            return await _orders.GetOrderById(id);
+            return _mapper.Map<Order, OrderDTO>(await _orders.AddOrder(_mapper.Map<OrderDTO, Order>(order)));
         }
-        public async Task<Order> AddOrder(Order order)
-        {
-            return await _orders.AddOrder(order);
-        }
+
+      
     }
 }
