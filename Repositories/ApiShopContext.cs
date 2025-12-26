@@ -11,6 +11,10 @@ public partial class ApiShopContext : DbContext
         : base(options)
     {
     }
+    public ApiShopContext()
+    {
+
+    }
 
     public virtual DbSet<Category> Categories { get; set; }
 
@@ -101,7 +105,7 @@ public partial class ApiShopContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("User");
-
+            entity.Property(e => e.Id).HasColumnName("User_Id");
             entity.HasIndex(e => e.Email, "unique_email").IsUnique();
 
             entity.Property(e => e.Email).HasMaxLength(255);
