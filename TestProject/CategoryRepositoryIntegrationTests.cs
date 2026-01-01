@@ -4,6 +4,7 @@ namespace TestProject
 {
     public class CategoryRepositoryIntegrationTests : IClassFixture<DatabaseFixture>
     {
+
         private readonly ApiShopContext _dbContext;
         private readonly CategoriesRepository _categoryRepository;
 
