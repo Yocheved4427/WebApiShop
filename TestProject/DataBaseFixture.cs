@@ -9,22 +9,14 @@ namespace TestProject
         public ApiShopContext Context { get; private set; }
 
         
-        private readonly DbContextOptions<ApiShopContext> _options;
-
         public DatabaseFixture()
         {
-            string dbName = $"ApiShop_Test_{Guid.NewGuid()}";
+            var options = new DbContextOptionsBuilder<ApiShopContext>()
 
+                .UseSqlServer("Data Source=Yocheved;Initial Catalog=ApiShopTest;Integrated Security=True;Pooling=False;TrustServerCertificate=True")
+                .Options;
             
-            string connectionString = $"Data Source=Yocheved;Initial Catalog={dbName};Integrated Security=True;Pooling=False;TrustServerCertificate=True";
-
-            var optionsBuilder = new DbContextOptionsBuilder<ApiShopContext>()
-                .UseSqlServer(connectionString);
-
-            _options = optionsBuilder.Options;
-            Context = new ApiShopContext(_options);
-
-           
+            Context = new ApiShopContext(options);
             Context.Database.EnsureCreated();
         }
 

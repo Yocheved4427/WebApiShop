@@ -14,8 +14,7 @@ builder.Services.AddScoped<ICategoriesServices, CategoriesServices>();
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository> ();
 builder.Services.AddScoped<IOrdersServices, OrdersServices>();
-builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
-builder.Services.AddScoped<ICategoriesServices, CategoriesServices>();
+
 builder.Host.UseNLog();
 builder.Services.AddDbContext<ApiShopContext>(option=>option.UseSqlServer ("Data Source=Yocheved;Initial Catalog=ApiShop;Integrated Security=True;Pooling=False;TrustServerCertificate=True"));
 // Add services to the container.

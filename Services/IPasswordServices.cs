@@ -1,7 +1,9 @@
-﻿namespace Services
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Services
 {
     public interface IPasswordServices
     {
-        int PasswordScore(string password);
+        public int PasswordScore(string password);
     }
 }

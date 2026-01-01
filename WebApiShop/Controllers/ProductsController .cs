@@ -15,15 +15,14 @@ namespace WebApiShop.Controllers
         {
             _IProductsServices = productsServices;
         }
-        //private static  List<User> users = new List<User>();
-
-
+       
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
+        public async Task<ActionResult<PageResponseDTO<ProductDTO>>> Get(int position, int skip, [FromQuery] int?[] categoryIds, string? description, int? maxPrice, int? minPrice)
         {
-            IEnumerable<ProductDTO> products = await _IProductsServices.GetProducts();
-            if (products != null && products.Any())
-                return Ok(products);
+            
+            PageResponseDTO<ProductDTO> pageResponse = await _IProductsServices.GetProducts(position, skip, categoryIds, description, maxPrice, minPrice);
+            if (pageResponse.Data.Count() > 0)
+                return Ok(pageResponse);
             return NoContent();
         }
 
