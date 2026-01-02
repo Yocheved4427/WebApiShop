@@ -2,18 +2,22 @@
 using Repositories;
 namespace TestProject
 {
-    public class CategoryRepositoryIntegrationTests : IClassFixture<DatabaseFixture>
+    public class CategoryRepositoryIntegrationTests : IDisposable
     {
-
+        private readonly DatabaseFixture _fixture;
         private readonly ApiShopContext _dbContext;
         private readonly CategoriesRepository _categoryRepository;
 
-        public CategoryRepositoryIntegrationTests(DatabaseFixture fixture)
+        public CategoryRepositoryIntegrationTests()
         {
-            _dbContext = fixture.Context;
+            _fixture = new DatabaseFixture();
+            _dbContext = _fixture.Context;
             _categoryRepository = new CategoriesRepository(_dbContext);
         }
-
+        public void Dispose()
+        {
+            _fixture.Dispose();
+        }
         [Fact]
         public async Task GetCategories_ShouldReturnAllCategories_WhenCategoriesExist()
         {

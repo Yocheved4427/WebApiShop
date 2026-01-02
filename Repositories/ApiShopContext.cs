@@ -27,7 +27,8 @@ public partial class ApiShopContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+      {
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.CategoryId).HasName("PK__Categori__6DB38D6E3FB4A635");
@@ -40,6 +41,7 @@ public partial class ApiShopContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("Category_Name");
+
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -122,4 +124,5 @@ public partial class ApiShopContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
 }

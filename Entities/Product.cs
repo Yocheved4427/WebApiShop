@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities;
 
@@ -10,6 +11,8 @@ public partial class Product
     public int ProductId { get; set; }
 
     public string ProductName { get; set; }
+
+    [Column(TypeName = "decimal(18,2)")]
 
     public decimal Price { get; set; }
 

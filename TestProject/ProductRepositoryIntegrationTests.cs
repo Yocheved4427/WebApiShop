@@ -3,15 +3,21 @@ using Repositories;
 
 namespace TestProject
 {
-    public class ProductRepositoryIntegrationTests : IClassFixture<DatabaseFixture>
+    public class ProductRepositoryIntegrationTests : IDisposable
     {
+        private readonly DatabaseFixture _fixture;
         private readonly ApiShopContext _dbContext;
         private readonly ProductsRepository _productsRepository;
 
-        public ProductRepositoryIntegrationTests(DatabaseFixture fixture)
+        public ProductRepositoryIntegrationTests()
         {
-            _dbContext = fixture.Context;
+            _fixture = new DatabaseFixture();
+            _dbContext = _fixture.Context;
             _productsRepository = new ProductsRepository(_dbContext);
+        }
+        public void Dispose()
+        {
+            _fixture.Dispose();
         }
 
         [Fact]
