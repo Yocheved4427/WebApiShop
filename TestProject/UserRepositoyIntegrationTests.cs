@@ -5,16 +5,22 @@ using Repositories;
 
 namespace TestProject
 {
-    public class UserRepositoyIntegrationTests : IClassFixture<DatabaseFixture>
+    public class UserRepositoyIntegrationTests : IDisposable
     {
+        private readonly DatabaseFixture _fixture;
         private readonly ApiShopContext _dbContext;
         private readonly UserRepository _userRepository;
-        public UserRepositoyIntegrationTests(DatabaseFixture fixture)
+        public UserRepositoyIntegrationTests()
         {
-            _dbContext = fixture.Context;
+            _fixture = new DatabaseFixture();
+            _dbContext = _fixture.Context;
             _userRepository = new UserRepository(_dbContext);
         }
-        
+        public void Dispose()
+        {
+            _fixture.Dispose();
+        }
+
         [Fact]
         public async Task Register_ShouldAddUserToDatabase_WhenUserIsValid()
         {

@@ -7,15 +7,21 @@ using Xunit;
 
 namespace TestProject
 {
-    public class OrderRepositoryIntegrationTests : IClassFixture<DatabaseFixture>
+    public class OrderRepositoryIntegrationTests :IDisposable
     {
+        private readonly DatabaseFixture _fixture;
         private readonly ApiShopContext _dbContext;
         private readonly OrdersRepository _ordersRepository;
 
-        public OrderRepositoryIntegrationTests(DatabaseFixture fixture)
+        public OrderRepositoryIntegrationTests()
         {
-            _dbContext = fixture.Context;
+            _fixture = new DatabaseFixture();
+            _dbContext = _fixture.Context;
             _ordersRepository = new OrdersRepository(_dbContext);
+        }
+        public void Dispose()
+        {
+            _fixture.Dispose();
         }
 
         [Fact]
