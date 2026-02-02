@@ -36,7 +36,7 @@ namespace WebApiShop.Controllers
             return Ok(user);
         }
         [HttpPost("Login")]
-        public async Task<ActionResult<UserDTO>> Login([FromBody] ExisitingUserDTO existingUser)
+        public async Task<ActionResult<UserDTO>> Login([FromBody] ExistingUserDTO existingUser)
         {
 
             UserDTO user = await _userServices.Login(existingUser);
