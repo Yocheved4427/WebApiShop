@@ -12,13 +12,12 @@ namespace WebApiShop.Controllers
         {
             _passwordServices = passwordServices;
         }
-       
+
         [HttpPost("PasswordScore")]
         public ActionResult<int> PasswordScore([FromBody] string password)
         {
             int strength = _passwordServices.PasswordScore(password);
             return Ok(strength);
         }
-
     }
 }

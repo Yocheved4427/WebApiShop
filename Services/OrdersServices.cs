@@ -8,12 +8,12 @@ namespace Services
     {
         private readonly IOrdersRepository _orders;
         private readonly IMapper _mapper;
-        public OrdersServices(IOrdersRepository orders,IMapper mapper)
+        public OrdersServices(IOrdersRepository orders, IMapper mapper)
         {
             _orders = orders;
             _mapper = mapper;
-
         }
+
         public async Task<OrderDTO?> GetOrderById(int id)
         {
             var order = await _orders.GetOrderById(id);
