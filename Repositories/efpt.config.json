@@ -23,10 +23,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Images]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Order_Item]",
          "ObjectType": 0
       },
@@ -35,15 +31,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Product_Month_Config]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Products]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[RATING]",
+         "Name": "[dbo].[Rating]",
          "ObjectType": 0
       },
       {
