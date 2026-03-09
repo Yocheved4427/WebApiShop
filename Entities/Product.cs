@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities;
 
@@ -12,15 +11,17 @@ public partial class Product
 
     public string ProductName { get; set; }
 
-    [Column(TypeName = "decimal(18,2)")]
-
-    public decimal Price { get; set; }
-
-    public int CategoryId { get; set; }
-
     public string Description { get; set; }
+
+    public int? CategoryId { get; set; }
+
+    public decimal? Price { get; set; }
 
     public virtual Category Category { get; set; }
 
+    public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+    public virtual ICollection<ProductMonthConfig> ProductMonthConfigs { get; set; } = new List<ProductMonthConfig>();
 }

@@ -9,11 +9,17 @@ public partial class OrderItem
 {
     public int OrderItemId { get; set; }
 
-    public int ProductId { get; set; }
+    public int? OrderId { get; set; }
 
-    public int OrderId { get; set; }
+    public int? ProductId { get; set; }
 
     public int? Quantity { get; set; }
+
+    public DateOnly? DepartureDate { get; set; }
+
+    public DateOnly? ReturnDate { get; set; }
+
+    public int? NightsCount { get; set; }
 
     public virtual Order Order { get; set; }
 

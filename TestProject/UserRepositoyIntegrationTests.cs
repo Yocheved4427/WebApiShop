@@ -37,10 +37,10 @@ namespace TestProject
 
             var result = await _userRepository.Register(userToAdd);
             Assert.NotNull(result);
-            Assert.NotEqual(0, result.Id);
+            Assert.NotEqual(0, result.UserId);
             Assert.Equal("Test", result.FirstName);
 
-            var userInDb = await _dbContext.Users.FindAsync(result.Id);
+            var userInDb = await _dbContext.Users.FindAsync(result.UserId);
             Assert.NotNull(userInDb);
             Assert.Equal("newUser@gmail.com", userInDb.Email);
         }
@@ -82,16 +82,16 @@ namespace TestProject
             
             var userWithUpdates = new User
             {
-                Id = originalUser.Id, 
+                UserId = originalUser.UserId, 
                 Email = originalUser.Email,
                 FirstName = "UpdatedName",
                 LastName = "User",
                 Password = "123"
             };
 
-            await _userRepository.Update(originalUser.Id, userWithUpdates);
+            await _userRepository.Update(originalUser.UserId, userWithUpdates);
             var userInDb = await _dbContext.Users.AsNoTracking()
-                                           .FirstOrDefaultAsync(u => u.Id == originalUser.Id);
+                                           .FirstOrDefaultAsync(u => u.UserId == originalUser.UserId);
 
             Assert.NotNull(userInDb);
             Assert.Equal("UpdatedName", userInDb.FirstName); 
@@ -110,7 +110,7 @@ namespace TestProject
             new Order
             {
                 OrderDate = DateOnly.FromDateTime(DateTime.Now),
-                OrderSum = 99.9 
+                OrderSum = 99 
             }
         }
             };
@@ -130,7 +130,7 @@ namespace TestProject
             Assert.NotEmpty(result.Orders);
 
             
-            Assert.Equal(99.9, result.Orders.First().OrderSum);
+            Assert.Equal(99, result.Orders.First().OrderSum);
         }
         [Fact]
         public async Task GetUserById_ShouldReturnUser_WhenIdExists()
@@ -149,10 +149,10 @@ namespace TestProject
 
             _dbContext.ChangeTracker.Clear();
 
-            var result = await _userRepository.GetUserById(userToAdd.Id);
+            var result = await _userRepository.GetUserById(userToAdd.UserId);
 
             Assert.NotNull(result); 
-            Assert.Equal(userToAdd.Id, result.Id);
+            Assert.Equal(userToAdd.UserId, result.UserId);
             Assert.Equal(userToAdd.Email, result.Email);
         }
         [Fact]

@@ -10,14 +10,16 @@ namespace DTOs
     (
         int Id,
         
-        string Email,
-
         string FirstName,
 
         string LastName,
 
-        string Password
+        string Email,
 
+        string Password,
         
+        bool IsAdmin
+
+
     );
 }

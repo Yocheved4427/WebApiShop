@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace DTOs
 {
@@ -13,12 +8,17 @@ namespace DTOs
 
      string ProductName,
 
-     decimal Price,
+     string Description,
 
      int CategoryId,
 
-     string Description
-        );
+     decimal Price,
+
+     string MainImageUrl,
+   
+    List<string> ImageUrls,
+
+    List<ProductMonthConfigDTO> MonthConfigs);
     
 
 }

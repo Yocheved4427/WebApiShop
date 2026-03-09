@@ -5,11 +5,13 @@ namespace DTOs
     (
         int? OrderId,
 
+        int UserId,
+
         DateOnly OrderDate ,
 
         double OrderSum,
 
-        int UserId,
+        string Status,
 
         ICollection<OrderItemDTO> OrderItems
     );
