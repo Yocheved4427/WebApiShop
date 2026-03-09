@@ -23,7 +23,7 @@ namespace Services
             return _mapper.Map<User,UserDTO>(await _repository.GetUserById(id));
             
         }
-        public async Task<UserDTO?> Login(ExisitingUserDTO existingUser)
+        public async Task<UserDTO?> Login(ExistingUserDTO existingUser)
         {
             return _mapper.Map<User,UserDTO>(await _repository.Login(existingUser.Email,existingUser.Password));
             

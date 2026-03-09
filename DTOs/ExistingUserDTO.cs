@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTOs
 {
-    public record ExisitingUserDTO
+    public record ExistingUserDTO
     (
         string Email,
         string Password
