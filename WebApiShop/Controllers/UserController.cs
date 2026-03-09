@@ -2,7 +2,6 @@
 using Services;
 using Entities;
 using DTOs;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApiShop.Controllers
 {
@@ -50,29 +49,23 @@ namespace WebApiShop.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDTO>> Register([FromBody] UserDTO user)
         {
-            UserDTO user1 = await _userServices.Register(user);
-            if (user1 == null)
-                return BadRequest("Password");
+            UserDTO registeredUser = await _userServices.Register(user);
+            if (registeredUser == null)
+                return BadRequest("Password is too weak");
 
-            return CreatedAtAction(nameof(GetUserById), new { user.Id }, user);
-
-
+            return CreatedAtAction(nameof(GetUserById), new { id = registeredUser.Id }, registeredUser);
         }
 
-        // PUT api/<Users>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UserDTO updateUser)
         {
-
             bool success = await _userServices.Update(id, updateUser);
             if (!success)
-                return BadRequest();
+                return BadRequest("Password is too weak");
             return NoContent();
         }
-
-
-
-
+    }
+}
 
 
     }
