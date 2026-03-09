@@ -13,46 +13,24 @@ namespace Services
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task<PageResponseDTO<ProductDTO>> GetProducts(int position, int skip, int?[] categoryIds, string? description, int? maxPrice, int? minPrice)
+        public async Task<PageResponseDTO<ProductDTO>> GetProducts(int position, int skip, int?[] categoryIds,
+           string? description, int? maxPrice, int? minPrice)
         {
-            // --- הוספת ברירות מחדל ---
-            // אם לא שלחו עמוד, נתחיל מעמוד 1
-            if (position <= 0) position = 1;
 
-            // אם לא שלחו כמות (או שלחו 0), נחזיר 10 מוצרים כברירת מחדל (או כל מספר שתרצי)
-            if (skip <= 0) skip = 10;
-            // -------------------------
-
-            // 1. שליפת הנתונים (עם הערכים המתוקנים)
-            var response = await _repository.GetProducts(position, skip, categoryIds, description, maxPrice, minPrice);
-
-            // 2. המרה ידנית (כמו שעשינו קודם כדי לעקוף את AutoMapper)
-            List<ProductDTO> data = response.Item1.Select(p => new ProductDTO(
-                p.ProductId,
-                p.ProductName ?? "",
-                p.Description ?? "",
-                p.CategoryId ?? 0,
-                (decimal)(p.Price ?? 0),
-                p.Images?.FirstOrDefault(i => i.IsMain)?.Url ?? "",
-                p.Images?.Select(i => i.Url).ToList() ?? new List<string>(),
-                new List<ProductMonthConfigDTO>()
-            )).ToList();
-
-            // 3. יצירת התשובה
-            PageResponseDTO<ProductDTO> pageResponse = new()
-            {
-                Data = data,
-                TotalItems = response.Item2,
-                CurrentPage = position,
-                PageSize = skip,
-                HasPreviousPage = position > 1
-            };
-
-            // חישוב עמודים
-            int totalPages = (int)Math.Ceiling((double)pageResponse.TotalItems / skip);
-            pageResponse.HasNextPage = position < totalPages;
-
+            (List<Product>, int) response = await _repository.GetProducts(position, skip, categoryIds, description, maxPrice, minPrice);
+            List<ProductDTO> data = _mapper.Map<List<Product>, List<ProductDTO>>(response.Item1);
+            PageResponseDTO<ProductDTO> pageResponse = new();
+            pageResponse.Data = data;
+            pageResponse.TotalItems = response.Item2;
+            pageResponse.CurrentPage = position;
+            pageResponse.PageSize = skip;
+            pageResponse.HasPreviousPage = position > 1;
+            int numOfPages = skip > 0 ? pageResponse.TotalItems / skip : 0;
+            if (skip > 0 && pageResponse.TotalItems % skip != 0)
+                numOfPages++;
+            pageResponse.HasNextPage = position < numOfPages;
             return pageResponse;
+
         }
     }
-    }
+}

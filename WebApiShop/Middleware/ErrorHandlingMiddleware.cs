@@ -19,7 +19,17 @@
             catch (Exception ex)
             {
                 context.Response.StatusCode = 500;
-                _logger.LogError(ex, ex.StackTrace);
+                context.Response.ContentType = "application/json";
+                _logger.LogError(ex, ex.Message);
+
+                var errorResponse = new
+                {
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace,
+                    innerException = ex.InnerException?.Message
+                };
+
+                await context.Response.WriteAsJsonAsync(errorResponse);
             }
         }
     }

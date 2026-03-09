@@ -3,22 +3,21 @@
 namespace DTOs
 {
     public record ProductDTO(
-     
+
      int ProductId,
 
      string ProductName,
 
-     string Description,
+     decimal Price,
 
      int CategoryId,
 
-     decimal Price,
+     string Description,
 
-     string MainImageUrl,
-   
-    List<string> ImageUrls,
+     string ImageUrl,
 
-    List<ProductMonthConfigDTO> MonthConfigs);
-    
+     bool IsAvailable
+        );
+
 
 }

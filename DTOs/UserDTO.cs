@@ -1,25 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DTOs
+﻿namespace DTOs
 {
     public record UserDTO
     (
-        int Id,
-        
-        string FirstName,
-
-        string LastName,
-
+        int UserId,
         string Email,
-
+        string FirstName,
+        string LastName,
         string Password,
-        
-        bool IsAdmin
-
-
+        bool IsAdmin,
+        ICollection<OrderDTO> Orders
     );
 }
