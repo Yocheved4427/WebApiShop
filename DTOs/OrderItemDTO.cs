@@ -7,7 +7,9 @@ namespace DTOs
 
             int ProductId,
 
-            int? Quantity
+            int Quantity
+
+            
         );
 
 }

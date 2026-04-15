@@ -3,6 +3,7 @@ using NLog.Web;
 using Repositories;
 using Services;
 using WebApiShop.MiddleWare;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +21,12 @@ builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 
 builder.Host.UseNLog();
-builder.Services.AddDbContext<ApiShopContext>(option => option.UseSqlServer("Data Source=Yocheved;Initial Catalog=NewApiShop;Integrated Security=True;Pooling=False;TrustServerCertificate=True"));
-
-builder.Services.AddControllers();
+builder.Services.AddDbContext<ApiShopContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("Home")));
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
 
 builder.Services.AddOpenApi();
 

@@ -38,6 +38,22 @@ namespace Repositories
             _context.Users.Update(updateUser);
             await _context.SaveChangesAsync();
         }
-       
+        public async Task<bool> UserWithSameEmail(string email, int id)
+        {
+            User? userWithSameEmail;
+            if (id < 0)
+            {
+                userWithSameEmail = await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
+            }
+            else
+            {
+                userWithSameEmail = await _context.Users.FirstOrDefaultAsync(user => user.Email == email && user.UserId != id);
+            }
+            if (userWithSameEmail == null)
+                return true;
+            return false;
+
+        }
+
     }
 }

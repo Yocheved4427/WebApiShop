@@ -3,7 +3,7 @@ async function checkPasswordScore() {
     try {
         const password = document.querySelector("#password2").value
         const progress = document.querySelector("#passwordScore")
-        const response = await fetch("https://localhost:44386/api/Password/PasswordScore", {
+        const response = await fetch('api/Password/PasswordScore', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ async function checkPasswordScore() {
 
 async function getUserData() {
     try {
-        const response = await fetch("https://localhost:44386/api/User");
+        const response = await fetch('api/Users');
         if (!response.ok)
             throw new Error("error")
 
@@ -47,7 +47,7 @@ async function Login() {
         if (email == "" || password == "")
             throw Error("Please enter userName and password")
         const LoginUser = { email, password }
-        const response = await fetch('api/User/Login', {
+        const response = await fetch('api/Users/Login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ async function Register() {
         const data = { Email, FirstName, LastName, Password };
         if (Email == "" || Password == "")
             throw Error("Please enter user name and password")
-        const response = await fetch("https://localhost:44386/api/User", {
+        const response = await fetch("api/Users", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

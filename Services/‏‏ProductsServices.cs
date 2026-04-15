@@ -32,5 +32,9 @@ namespace Services
             return pageResponse;
 
         }
+        public async Task<IEnumerable<ProductDTO>> GetProducts()
+        {
+            return _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(await _repository.GetProducts());
+        }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
-using Entities;
 using DTOs;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApiShop.Controllers
 {
@@ -30,7 +28,7 @@ namespace WebApiShop.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUserById(int id)
         {
-            UserDTO user = await _userServices.GetUserById(id);
+            UserDTO? user = await _userServices.GetUserById(id);
             if (user == null)
                 return NotFound();
             return Ok(user);
@@ -39,7 +37,7 @@ namespace WebApiShop.Controllers
         public async Task<ActionResult<UserDTO>> Login([FromBody] ExistingUserDTO existingUser)
         {
 
-            UserDTO user = await _userServices.Login(existingUser);
+            UserDTO? user = await _userServices.Login(existingUser);
             if (user== null)
                 return Unauthorized("Invalid email or password");
 
@@ -48,33 +46,31 @@ namespace WebApiShop.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> Register([FromBody] UserDTO user)
+        public async Task<ActionResult<UserDTO>> Register([FromBody] PostUserDTO newUser)
         {
-            UserDTO user1 = await _userServices.Register(user);
-            if (user1 == null)
-                return BadRequest("Password");
-
-            return CreatedAtAction(nameof(GetUserById), new { user.UserId }, user);
+            if (!await _userServices.UserWithSameEmail(newUser.Email))
+                return BadRequest("The email already exists. Please try again.");
+            if (!_userServices.IsPasswordStrong(newUser.Password))
+                return BadRequest("The password is too weak. Please try again.");
+            UserDTO? returnedUser = await _userServices.Register(newUser);
+            if (returnedUser == null)
+                return BadRequest();
+            return CreatedAtAction(nameof(Get), new { id = returnedUser.UserId }, returnedUser);
 
 
         }
 
-        // PUT api/<Users>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UserDTO updateUser)
+        public async Task<IActionResult> Update(int id, [FromBody] PostUserDTO updateUser)
         {
 
-            bool success = await _userServices.Update(id, updateUser);
-            if (!success)
-                return BadRequest();
+            if (!await _userServices.UserWithSameEmail(updateUser.Email, updateUser.UserId))
+                return BadRequest("The email already exists. Please try again.");
+            if (!_userServices.IsPasswordStrong(updateUser.Password))
+                return BadRequest("The password is too weak. Please try again.");
+            await _userServices.Update(id, updateUser);
             return NoContent();
         }
-
-
-
-
-
-
     }
 }
 

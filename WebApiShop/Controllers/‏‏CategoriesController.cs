@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
-using Entities;
 using DTOs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -28,18 +27,6 @@ namespace WebApiShop.Controllers
                 return Ok(categories);
             return NoContent();
         }
-
-
-        //[HttpGet("{id}")]
-
-        //[HttpPost("Login")]
-
-
-        //[HttpPost]
-
-
-        //// PUT api/<Users>/5
-        //[HttpPut("{id}")]
 
     }
 }

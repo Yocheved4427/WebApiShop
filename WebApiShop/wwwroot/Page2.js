@@ -34,7 +34,7 @@ async function updateUser() {
 
         console.log("PUT body:", JSON.stringify(data));
 
-        const response = await fetch(`https://localhost:44386/api/User/${Id}`, {
+        const response = await fetch(`api/Users/${Id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

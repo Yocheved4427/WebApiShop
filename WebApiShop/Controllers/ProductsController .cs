@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
-using Entities;
 using DTOs;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,33 +15,27 @@ namespace WebApiShop.Controllers
             _IProductsServices = productsServices;
         }
        
-        [HttpGet]
+        [HttpGet ("Filter")]
         public async Task<ActionResult<PageResponseDTO<ProductDTO>>> Get(int position, int skip, [FromQuery] int?[] categoryIds, string? description, int? maxPrice, int? minPrice)
         {
-            
+
             PageResponseDTO<ProductDTO> pageResponse = await _IProductsServices.GetProducts(position, skip, categoryIds, description, maxPrice, minPrice);
-            if (pageResponse.Data.Count() > 0)
+            if (pageResponse.Data != null && pageResponse.Data.Count > 0)
                 return Ok(pageResponse);
             return NoContent();
         }
 
 
 
-        //[HttpGet("{id}")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
+        {
+            IEnumerable<ProductDTO> products = await _IProductsServices.GetProducts();
+            if (products != null && products.Any())
+                return Ok(products);
+            return NoContent();
 
-        //[HttpPost("Login")]
-
-
-        //[HttpPost]
-
-        //// PUT api/<Users>/5
-        //[HttpPut("{id}")]
-
-
-
-
-
-
+        }
 
     }
 }
