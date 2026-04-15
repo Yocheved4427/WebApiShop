@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repositories
 
@@ -14,7 +15,10 @@ namespace Repositories
         }
         public async Task<Order?> GetOrderById(int id)
         {
-            return await _context.Orders.FindAsync(id);
+            return await _context.Orders
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(o => o.OrderId == id);
         }
         public async Task<Order> AddOrder(Order order)
         {

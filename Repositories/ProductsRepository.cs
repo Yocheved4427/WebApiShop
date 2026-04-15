@@ -27,6 +27,10 @@ namespace Repositories
             var total = await query.CountAsync();
             return (products, total);
         }
+        public async Task<IEnumerable<Product>> GetProducts()
+        {
+            return await _context.Products.Include(product => product.Category).ToListAsync();
 
+        }
     }
 }

@@ -8,6 +8,10 @@ namespace Repositories;
 
 public partial class ApiShopContext : DbContext
 {
+    public ApiShopContext()
+    {
+    }
+
     public ApiShopContext(DbContextOptions<ApiShopContext> options)
         : base(options)
     {
