@@ -4,3 +4,4 @@ GET {{WebApiShop_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+

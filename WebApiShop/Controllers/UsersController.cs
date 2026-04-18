@@ -63,9 +63,6 @@ namespace WebApiShop.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] PostUserDTO updateUser)
         {
-
-            if (!await _userServices.UserWithSameEmail(updateUser.Email, updateUser.UserId))
-                return BadRequest("The email already exists. Please try again.");
             if (!_userServices.IsPasswordStrong(updateUser.Password))
                 return BadRequest("The password is too weak. Please try again.");
             await _userServices.Update(id, updateUser);
