@@ -21,7 +21,7 @@ builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 
 builder.Host.UseNLog();
-builder.Services.AddDbContext<ApiShopContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("Home")));
+builder.Services.AddDbContext<ApiShopContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("Studies")));
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {

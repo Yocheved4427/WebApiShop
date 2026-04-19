@@ -15,7 +15,7 @@ namespace TestProject
             _databaseName = $"ApiShopTest_{Guid.NewGuid():N}";
             var options = new DbContextOptionsBuilder<ApiShopContext>()
 
-                .UseSqlServer($"Data Source=Yocheved;Initial Catalog={_databaseName};Integrated Security=True;Pooling=False;TrustServerCertificate=True")
+                .UseSqlServer($"Data Source=srv2\\pupils;Initial Catalog={_databaseName};Integrated Security=True;Pooling=False;TrustServerCertificate=True")
                 .Options;
 
             Context = new ApiShopContext(options);
