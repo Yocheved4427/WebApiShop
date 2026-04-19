@@ -31,25 +31,14 @@ namespace Services
 
         public async Task<OrderDTO?> AddOrder(OrderDTO order)
         {
-            if (order.OrderItems == null || !order.OrderItems.Any())
+           
+            double calculatedSum = await ValidateOrderSum(order);
+
+            if (calculatedSum <= 0)
             {
-                _logger.LogWarning($"Order rejected - No order items provided. UserId: {order.UserId}");
+                _logger.LogWarning($"Order rejected - Validation failed for UserId: {order.UserId}"); //
                 return null;
             }
-
-            var allProducts = await _products.GetProducts();
-            double calculatedSum = 0;
-            foreach (var item in order.OrderItems)
-            {
-                var product = allProducts.FirstOrDefault(p => p.ProductId == item.ProductId);
-                if (product == null)
-                {
-                    _logger.LogWarning($"Order rejected - Product not found. ProductId: {item.ProductId}, UserId: {order.UserId}");
-                    return null;
-                }
-                calculatedSum += (double)product.Price * item.Quantity;
-            }
-
 
             var orderWithCalculatedSum = new OrderDTO(
                 order.OrderId,
@@ -59,31 +48,33 @@ namespace Services
                 order.OrderItems
             );
 
-
-            Order placedOrder = await _orders.AddOrder(_mapper.Map<OrderDTO, Order>(orderWithCalculatedSum));
-            _logger.LogInformation($"Order Id {placedOrder.OrderId} was placed successfully with sum: {calculatedSum}");
+           
+            Order placedOrder = await _orders.AddOrder(_mapper.Map<OrderDTO, Order>(orderWithCalculatedSum)); //
+            _logger.LogInformation($"Order Id {placedOrder.OrderId} placed successfully with sum: {calculatedSum}");
 
             return _mapper.Map<Order, OrderDTO>(placedOrder);
         }
 
-        public async Task<bool> ValidateOrderSum(OrderDTO order)
+        public async Task<double> ValidateOrderSum(OrderDTO order)
         {
             if (order.OrderItems == null || !order.OrderItems.Any())
-                return false;
+                return 0;
 
-            var allProducts = await _products.GetProducts();
+            var allProducts = await _products.GetProducts(); 
             double calculatedSum = 0;
 
             foreach (var item in order.OrderItems)
             {
                 var product = allProducts.FirstOrDefault(p => p.ProductId == item.ProductId);
                 if (product == null)
-                    return false;
-
+                {
+                    _logger.LogWarning($"Validation failed - Product {item.ProductId} not found."); 
+                    return -1; 
+                }
                 calculatedSum += (double)product.Price * item.Quantity;
             }
 
-            return Math.Abs(calculatedSum - order.OrderSum) < 0.01;
+            return calculatedSum;
         }
     }
 }

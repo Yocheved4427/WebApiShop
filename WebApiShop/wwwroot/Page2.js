@@ -38,7 +38,6 @@ async function updateUser() {
             throw new Error("Failed to update profile.");
         }
 
-        // שמירה ישירה במקום פונקציה שלא קיימת
         sessionStorage.setItem('user', JSON.stringify({ ...currentUser, ...user }));
 
         alert("Profile updated successfully!");

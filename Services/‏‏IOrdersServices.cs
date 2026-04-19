@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿    using Entities;
 using DTOs;
 namespace Services
 {
@@ -6,6 +6,6 @@ namespace Services
     {
         Task<OrderDTO?> GetOrderById(int id);
         Task<OrderDTO?> AddOrder(OrderDTO order);
-        Task<bool> ValidateOrderSum(OrderDTO order);
+        Task<double> ValidateOrderSum(OrderDTO order);
     }
 }
