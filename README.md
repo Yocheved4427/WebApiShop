@@ -1,119 +1,110 @@
-# WebApiShop
+# 🛒 WebApiShop — REST API with .NET 9
 
-A RESTful API for an online shop built with **ASP.NET Core** and **.NET 9**.
+A production-ready RESTful Web API for an online shop, built with **C#** and **.NET 9**, designed around clean architecture and solid backend engineering practices.
 
-## Architecture
+---
 
-The project follows a **3-layer architecture** with clear separation of concerns:
+## 🏗️ Project Architecture
 
-| Layer | Project | Responsibility |
-|---|---|---|
-| **Application** | `WebApiShop` | Controllers, middleware, configuration |
-| **Services** | `Services` | Business logic |
-| **Repositories** | `Repositories` | Data access via Entity Framework Core |
-| **DTOs** | `DTOs` | Data Transfer Objects (records) |
-| **Entities** | `Entities` | Database entity models |
-| **Tests** | `TestProject` | Unit tests & integration tests |
+The codebase is divided into **3 layers** that communicate through abstractions:
 
-Layers communicate through **dependency injection** for loose coupling. All data access is **asynchronous** to improve scalability.
+| Layer | Role |
+|---|---|
+| **Application** | Entry point — controllers, middleware, configuration |
+| **Services** | Business logic — orchestrates operations and domain rules |
+| **Repositories** | Database access — abstracts all EF Core queries |
 
-## Tech Stack
+All layers are wired together using ASP.NET Core's built-in **Dependency Injection**, so each layer depends only on interfaces — not on concrete implementations.
 
-- **.NET 9** / C# 13
-- **ASP.NET Core** Web API
-- **Entity Framework Core** (Database-First approach with SQL Server)
-- **AutoMapper** – Entity ↔ DTO mapping
-- **NLog** – Structured logging to file
-- **Swagger / OpenAPI** – API documentation (development)
+---
 
-## API Endpoints
+## ✨ Features
 
-### Users
-| Method | Route | Description |
-|---|---|---|
-| `GET` | `/api/Users` | Get all users |
-| `GET` | `/api/Users/{id}` | Get user by ID |
-| `POST` | `/api/Users` | Register a new user |
-| `POST` | `/api/Users/Login` | Login with credentials |
+### 🌐 REST API
+Clean, resource-oriented endpoints following REST conventions — correct HTTP methods, meaningful status codes, and consistent response shapes.
 
-### Products
-| Method | Route | Description |
-|---|---|---|
-| `GET` | `/api/Products` | Get all products |
-| `GET` | `/api/Products/Filter` | Get products with filtering & pagination |
+### 🗃️ Entity Framework Core
+The project uses **EF Core** as the ORM to interact with the database using strongly typed C# instead of raw SQL.
 
-### Categories
-| Method | Route | Description |
-|---|---|---|
-| `GET` | `/api/Categories` | Get all categories |
+### ⚡ Fully Async
+Every database call is made **asynchronously** using `async/await`, keeping threads free and the API responsive under concurrent load.
 
-### Orders
-| Method | Route | Description |
-|---|---|---|
-| `GET` | `/api/Orders/{id}` | Get order by ID |
-| `POST` | `/api/Orders` | Place a new order |
+### 🔄 DTO Layer — Records + AutoMapper
+- A dedicated **DTO layer** sits between the API and the data model, preventing internal entities from leaking into responses.
+- All DTOs are written as **C# `record` types** — concise, immutable, and perfect for read-only data transfer.
+- **AutoMapper** handles all conversions between entities and DTOs automatically.
 
-### Password
-| Method | Route | Description |
-|---|---|---|
-| `POST` | `/api/Password/PasswordScore` | Evaluate password strength |
+### 🔧 External Configuration
+Sensitive and environment-specific settings are stored in `appsettings.json` and `appsettings.Development.json`, never hardcoded.
 
-## Middleware
+### 📝 Structured Logging — NLog
+**NLog** is configured in `nlog.config` and integrated across all layers to produce structured, readable logs for every request and operation.
 
-- **ErrorHandlingMiddleware** – Global exception handling; catches all unhandled exceptions, logs them via NLog, and returns a structured JSON error response with status 500.
-- **RatingMiddleware** – Logs all incoming HTTP traffic (host, method, path, referer, user agent, timestamp) to a `Rating` table in the database for analytics.
+### 🚨 Global Error Handling Middleware
+A centralized `ErrorHandlingMiddleware` intercepts all unhandled exceptions, returning consistent error responses and keeping internal details private.
 
-## Database Entities
+### 📈 Request Tracking
+Every incoming request is logged to a **Rating table**, giving full visibility into API usage patterns and traffic over time.
 
-- **User** – UserId, FirstName, LastName, Email, Password, IsAdmin
-- **Product** – ProductId, ProductName, Price, CategoryId, Description, ImageUrl
-- **Category** – CategoryId, CategoryName
-- **Order** – OrderId, OrderDate, OrderSum, UserId
-- **OrderItem** – Links orders to products with quantities
-- **Rating** – Stores HTTP request traffic data
+### 🧪 Unit & Integration Tests
+Testing is done with **xUnit** and covers:
+- **Unit tests** — individual classes tested in isolation.
+- **Integration tests** — full request-to-database flows tested with a shared `DataBaseFixture`.
 
-## Configuration
+Tested entities: `Category`, `Product`, `Order`, `User`.
 
-Application settings are stored separately from code in `appsettings.json`:
-- Connection strings for SQL Server
-- Logging configuration
+---
 
-NLog configuration is defined in `nlog.config`.
+## 🛠️ Tech Stack
 
-## Testing
+| Technology | Role |
+|---|---|
+| .NET 9 / C# | Runtime & language |
+| ASP.NET Core | Web API framework |
+| Entity Framework Core | ORM & migrations |
+| AutoMapper | Object mapping |
+| NLog | Logging |
+| xUnit | Testing |
+| DI (built-in) | Layer decoupling |
 
-The project includes two types of tests:
+---
 
-- **Unit Tests** – Test individual components in isolation (e.g., `OrderRepositoryUnitTesting`, `CategoryRepositoryUnitTesting`, `UserRepositoryUnitTesting`)
-- **Integration Tests** – Test components working together with a real database context via `DataBaseFixture` (e.g., `OrderRepositoryIntegrationTests`, `CategoryRepositoryIntegrationTests`, `UserRepositoyIntegrationTests`, `ProductRepositoryIntegrationTests`)
-- **Validation Tests** – `OrderSumValidationTests` for verifying order sum calculations
+## 📂 Project Structure
 
-## Getting Started
+```
+WebApiShop.sln
+├── WebApiShop/           # Controllers, middleware, AutoMapper, Program.cs
+├── Services/             # Business logic & service interfaces
+├── Repositories/         # EF Core context, repositories & interfaces
+├── Entities/             # EF Core domain models
+├── DTOs/                 # C# record DTOs
+└── TestProject/          # xUnit unit & integration tests
+```
 
-### Prerequisites
+---
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- SQL Server
+## 🚀 Getting Started
 
-### Setup
+### Requirements
+- [.NET 9 SDK](https://dotnet.microsoft.com/download)
+- SQL Server (or any EF Core-supported database)
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Yocheved4427/WebApiShop.git
-   ```
+### Run the API
 
-2. Update the connection string in `WebApiShop/appsettings.json` to point to your SQL Server instance.
+```bash
+dotnet restore
+dotnet ef database update --project Repositories
+dotnet run --project WebApiShop
+```
 
-3. Run the application:
-   ```bash
-   cd WebApiShop
-   dotnet run --project WebApiShop
-   ```
-
-4. Open the Swagger UI at `https://localhost:<port>/swagger` to explore the API.
-
-### Running Tests
+### Run Tests
 
 ```bash
 dotnet test
 ```
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
